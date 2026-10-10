@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -42,6 +43,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.activity.ComponentActivity
+import com.example.ttsnote.LocaleHelper
+import com.example.ttsnote.R
 import com.example.ttsnote.data.Note
 import com.example.ttsnote.tts.TtsService
 import kotlinx.coroutines.delay
@@ -213,7 +217,7 @@ fun NoteEditScreen(
         val voices = remember { ttsService?.getVoices() ?: emptyList() }
         AlertDialog(
             onDismissRequest = { showVoiceDialog = false },
-            title = { Text("選擇高品質語音") },
+            title = { Text(stringResource(R.string.select_hq_voice)) },
             text = {
                 LazyColumn(modifier = Modifier.heightIn(max = 400.dp)) {
                     items(voices) { voice ->
@@ -227,19 +231,19 @@ fun NoteEditScreen(
                                     if (isHighQuality) {
                                         SuggestionChip(
                                             onClick = {},
-                                            label = { Text("高品質", fontSize = 10.sp) },
+                                            label = { Text(stringResource(R.string.high_quality), fontSize = 10.sp) },
                                             modifier = Modifier.padding(end = 4.dp)
                                         )
                                     }
                                     if (isNetwork) {
                                         SuggestionChip(
                                             onClick = {},
-                                            label = { Text("需要網路", fontSize = 10.sp) }
+                                            label = { Text(stringResource(R.string.requires_network), fontSize = 10.sp) }
                                         )
                                     } else {
                                         SuggestionChip(
                                             onClick = {},
-                                            label = { Text("離線可用", fontSize = 10.sp) }
+                                            label = { Text(stringResource(R.string.offline_available), fontSize = 10.sp) }
                                         )
                                     }
                                 }
@@ -253,7 +257,7 @@ fun NoteEditScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = { showVoiceDialog = false }) { Text("關閉") }
+                TextButton(onClick = { showVoiceDialog = false }) { Text(stringResource(R.string.close)) }
             }
         )
     }
@@ -264,7 +268,7 @@ fun NoteEditScreen(
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    "智慧目錄", 
+                    stringResource(R.string.smart_toc),
                     modifier = Modifier.padding(horizontal = 28.dp, vertical = 16.dp),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
@@ -318,7 +322,7 @@ fun NoteEditScreen(
                                 TextField(
                                     value = innerSearchQuery,
                                     onValueChange = { innerSearchQuery = it },
-                                    placeholder = { Text("搜尋內文...") },
+                                    placeholder = { Text(stringResource(R.string.search_content)) },
                                     modifier = Modifier.fillMaxWidth(),
                                     singleLine = true,
                                     colors = TextFieldDefaults.colors(
@@ -330,7 +334,7 @@ fun NoteEditScreen(
                                 TextField(
                                     value = title,
                                     onValueChange = { title = it },
-                                    placeholder = { Text("標題", fontWeight = FontWeight.Bold) },
+                                    placeholder = { Text(stringResource(R.string.title_hint), fontWeight = FontWeight.Bold) },
                                     singleLine = true,
                                     colors = TextFieldDefaults.colors(
                                         focusedContainerColor = Color.Transparent,
@@ -349,14 +353,14 @@ fun NoteEditScreen(
                                         isSearchingContent = false
                                         innerSearchQuery = ""
                                     }) {
-                                        Icon(Icons.Default.Close, "關閉搜尋")
+                                        Icon(Icons.Default.Close, stringResource(R.string.close_search))
                                     }
                                 } else {
                                     IconButton(onClick = onBackClick) {
-                                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "返回")
+                                        Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back))
                                     }
                                     IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                                        Icon(Icons.Default.Menu, "目錄")
+                                        Icon(Icons.Default.Menu, stringResource(R.string.toc))
                                     }
                                 }
                             }
@@ -364,13 +368,13 @@ fun NoteEditScreen(
                         actions = {
                             if (!isSearchingContent) {
                                 IconButton(onClick = { isSearchingContent = true }) {
-                                    Icon(Icons.Default.Search, "搜尋")
+                                    Icon(Icons.Default.Search, stringResource(R.string.search))
                                 }
                                 IconButton(onClick = { isPreviewMode = !isPreviewMode }) {
-                                    Icon(if (isPreviewMode) Icons.Default.EditNote else Icons.AutoMirrored.Filled.MenuBook, "切換")
+                                    Icon(if (isPreviewMode) Icons.Default.EditNote else Icons.AutoMirrored.Filled.MenuBook, stringResource(R.string.toggle_preview))
                                 }
                                 IconButton(onClick = { showSettingsSheet = true }) {
-                                    Icon(Icons.Default.Tune, "設置")
+                                    Icon(Icons.Default.Tune, stringResource(R.string.settings))
                                 }
                             }
                         }
@@ -498,7 +502,7 @@ fun NoteEditScreen(
                             onTextLayout = { textLayoutResult = it },
                             decorationBox = { innerTextField ->
                                 if (contentValue.text.isEmpty()) {
-                                    Text("開始輸入內容...", color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                                    Text(stringResource(R.string.start_typing), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
                                 }
                                 innerTextField()
                             }
@@ -653,12 +657,51 @@ fun SettingsSheetContent(
     val sections by viewModel.allSections.collectAsState()
     var showSectionPicker by remember { mutableStateOf(false) }
     
+    val language by viewModel.language.collectAsState()
+    val activity = context as? ComponentActivity
+
     Column(modifier = Modifier.fillMaxWidth().padding(24.dp).verticalScroll(rememberScrollState())) {
-        Text("播放與視覺設置", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.playback_visual_settings), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
+
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.language)) },
+            supportingContent = {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    FilterChip(
+                        selected = language == LocaleHelper.LANG_EN,
+                        onClick = {
+                            if (language != LocaleHelper.LANG_EN) {
+                                LocaleHelper.setLanguage(context, LocaleHelper.LANG_EN)
+                                viewModel.updateLanguage(LocaleHelper.LANG_EN)
+                                activity?.recreate()
+                            }
+                        },
+                        label = { Text(stringResource(R.string.language_english)) }
+                    )
+                    FilterChip(
+                        selected = language == LocaleHelper.LANG_ZH,
+                        onClick = {
+                            if (language != LocaleHelper.LANG_ZH) {
+                                LocaleHelper.setLanguage(context, LocaleHelper.LANG_ZH)
+                                viewModel.updateLanguage(LocaleHelper.LANG_ZH)
+                                activity?.recreate()
+                            }
+                        },
+                        label = { Text(stringResource(R.string.language_chinese)) }
+                    )
+                }
+            },
+            leadingContent = { Icon(Icons.Default.Language, null) }
+        )
+
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         
         ListItem(
-            headlineContent = { Text("主題模式") },
+            headlineContent = { Text(stringResource(R.string.theme_mode)) },
             supportingContent = {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
@@ -666,19 +709,19 @@ fun SettingsSheetContent(
                 ) {
                     ThemeOption(
                         icon = Icons.Default.BrightnessAuto,
-                        label = "自動",
+                        label = stringResource(R.string.theme_auto),
                         isSelected = themeMode == ThemeMode.Auto,
                         onClick = { viewModel.updateThemeMode(ThemeMode.Auto) }
                     )
                     ThemeOption(
                         icon = Icons.Default.LightMode,
-                        label = "淺色",
+                        label = stringResource(R.string.theme_light),
                         isSelected = themeMode == ThemeMode.Light,
                         onClick = { viewModel.updateThemeMode(ThemeMode.Light) }
                     )
                     ThemeOption(
                         icon = Icons.Default.DarkMode,
-                        label = "深色",
+                        label = stringResource(R.string.theme_dark),
                         isSelected = themeMode == ThemeMode.Dark,
                         onClick = { viewModel.updateThemeMode(ThemeMode.Dark) }
                     )
@@ -690,7 +733,7 @@ fun SettingsSheetContent(
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 
         ListItem(
-            headlineContent = { Text("字體大小 (${globalFontSize}sp)") },
+            headlineContent = { Text(stringResource(R.string.font_size, globalFontSize)) },
             supportingContent = {
                 Slider(
                     value = globalFontSize.toFloat(),
@@ -703,9 +746,10 @@ fun SettingsSheetContent(
         )
 
         ListItem(
-            headlineContent = { Text("所屬分區") },
+            headlineContent = { Text(stringResource(R.string.section_belonging)) },
             supportingContent = { 
-                val sectionName = sections.find { it.id == currentNote?.sectionId }?.name ?: "未分類"
+                val sectionName = sections.find { it.id == currentNote?.sectionId }?.name
+                    ?: stringResource(R.string.uncategorized)
                 Text(sectionName) 
             },
             leadingContent = { Icon(Icons.Default.Folder, null) },
@@ -715,12 +759,12 @@ fun SettingsSheetContent(
         if (showSectionPicker) {
             AlertDialog(
                 onDismissRequest = { showSectionPicker = false },
-                title = { Text("選擇分區") },
+                title = { Text(stringResource(R.string.select_section)) },
                 text = {
                     LazyColumn(modifier = Modifier.heightIn(max = 300.dp)) {
                         item {
                             ListItem(
-                                headlineContent = { Text("未分類") },
+                                headlineContent = { Text(stringResource(R.string.uncategorized)) },
                                 modifier = Modifier.clickable {
                                     currentNote?.let { viewModel.updateNote(it.copy(sectionId = 0)) }
                                     showSectionPicker = false
@@ -738,19 +782,23 @@ fun SettingsSheetContent(
                         }
                     }
                 },
-                confirmButton = { TextButton(onClick = { showSectionPicker = false }) { Text("取消") } }
+                confirmButton = {
+                    TextButton(onClick = { showSectionPicker = false }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                }
             )
         }
 
         ListItem(
-            headlineContent = { Text("切換高品質語音") },
-            supportingContent = { Text("選擇更生動的朗讀人聲") },
+            headlineContent = { Text(stringResource(R.string.switch_hq_voice)) },
+            supportingContent = { Text(stringResource(R.string.switch_hq_voice_desc)) },
             leadingContent = { Icon(Icons.Default.RecordVoiceOver, null) },
             modifier = Modifier.clickable { onVoiceClick() }
         )
 
         ListItem(
-            headlineContent = { Text("睡眠定時器") },
+            headlineContent = { Text(stringResource(R.string.sleep_timer)) },
             trailingContent = {
                 var timerText by remember { mutableStateOf("") }
                 OutlinedTextField(
@@ -760,7 +808,7 @@ fun SettingsSheetContent(
                         ttsService?.setSleepTimer(it.toIntOrNull() ?: 0)
                     },
                     modifier = Modifier.width(80.dp),
-                    placeholder = { Text("分") },
+                    placeholder = { Text(stringResource(R.string.minutes_short)) },
                     singleLine = true
                 )
             },
@@ -768,7 +816,7 @@ fun SettingsSheetContent(
         )
 
         ListItem(
-            headlineContent = { Text("音調調節 (Pitch)") },
+            headlineContent = { Text(stringResource(R.string.pitch_adjust)) },
             supportingContent = {
                 var pitch by remember { mutableStateOf(1.0f) }
                 Slider(
@@ -785,8 +833,8 @@ fun SettingsSheetContent(
         )
 
         ListItem(
-            headlineContent = { Text("高品質語音設定") },
-            supportingContent = { Text("前往系統設定下載更好的語音包") },
+            headlineContent = { Text(stringResource(R.string.hq_voice_settings)) },
+            supportingContent = { Text(stringResource(R.string.hq_voice_settings_desc)) },
             leadingContent = { Icon(Icons.Default.Settings, null) },
             modifier = Modifier.clickable { 
                 val intent = Intent().apply {
@@ -800,7 +848,7 @@ fun SettingsSheetContent(
         
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = onClose, modifier = Modifier.fillMaxWidth()) {
-            Text("完成")
+            Text(stringResource(R.string.done))
         }
     }
 }

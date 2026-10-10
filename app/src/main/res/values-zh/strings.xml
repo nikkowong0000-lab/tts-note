@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">語音筆記</string>
+    <string name="app_display_name">EchoNotes</string>
+
+    <!-- Common -->
+    <string name="cancel">取消</string>
+    <string name="close">關閉</string>
+    <string name="done">完成</string>
+    <string name="create">建立</string>
+    <string name="delete">刪除</string>
+    <string name="search">搜尋</string>
+    <string name="settings">設置</string>
+    <string name="back">返回</string>
+    <string name="language">語言</string>
+    <string name="language_english">English</string>
+    <string name="language_chinese">中文</string>
+
+    <!-- Note list -->
+    <string name="search_ellipsis">搜尋...</string>
+    <string name="close_search">關閉搜尋</string>
+    <string name="import_text_file">匯入文字檔</string>
+    <string name="imported_note">匯入的筆記</string>
+    <string name="add_section">新增分區</string>
+    <string name="section_name">分區名稱</string>
+    <string name="all_sections">全部</string>
+    <string name="add_note">新增筆記</string>
+    <string name="untitled_note">無標題筆記</string>
+    <string name="pin">釘選</string>
+    <string name="empty_notes_title">還沒有任何筆記</string>
+    <string name="empty_notes_subtitle">點擊右下角按鈕開始記錄吧！</string>
+
+    <!-- Note edit -->
+    <string name="select_hq_voice">選擇高品質語音</string>
+    <string name="high_quality">高品質</string>
+    <string name="requires_network">需要網路</string>
+    <string name="offline_available">離線可用</string>
+    <string name="smart_toc">智慧目錄</string>
+    <string name="search_content">搜尋內文...</string>
+    <string name="title_hint">標題</string>
+    <string name="toc">目錄</string>
+    <string name="toggle_preview">切換</string>
+    <string name="start_typing">開始輸入內容...</string>
+    <string name="playback_visual_settings">播放與視覺設置</string>
+    <string name="theme_mode">主題模式</string>
+    <string name="theme_auto">自動</string>
+    <string name="theme_light">淺色</string>
+    <string name="theme_dark">深色</string>
+    <string name="font_size">字體大小 (%1$dsp)</string>
+    <string name="section_belonging">所屬分區</string>
+    <string name="uncategorized">未分類</string>
+    <string name="select_section">選擇分區</string>
+    <string name="switch_hq_voice">切換高品質語音</string>
+    <string name="switch_hq_voice_desc">選擇更生動的朗讀人聲</string>
+    <string name="sleep_timer">睡眠定時器</string>
+    <string name="minutes_short">分</string>
+    <string name="pitch_adjust">音調調節 (Pitch)</string>
+    <string name="hq_voice_settings">高品質語音設定</string>
+    <string name="hq_voice_settings_desc">前往系統設定下載更好的語音包</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_tts">TTS 播放</string>
+    <string name="notification_playing">EchoNotes 正在播放...</string>
+    <string name="notification_playing_short">正在播放...</string>
+</resources>

@@ -19,6 +19,7 @@ import android.view.KeyEvent
 import androidx.core.app.NotificationCompat
 import androidx.media.session.MediaButtonReceiver
 import com.example.ttsnote.MainActivity
+import com.example.ttsnote.R
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.StateFlow
 
@@ -118,7 +119,7 @@ class TtsService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         MediaButtonReceiver.handleIntent(mediaSession, intent)
-        val notification = createNotification("EchoNotes 正在播放...")
+        val notification = createNotification(getString(R.string.notification_playing))
         startForeground(NOTIFICATION_ID, notification)
         return START_STICKY
     }
@@ -127,7 +128,7 @@ class TtsService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "TTS Playback",
+                getString(R.string.notification_channel_tts),
                 NotificationManager.IMPORTANCE_LOW
             )
             val manager = getSystemService(NotificationManager::class.java)
@@ -142,7 +143,7 @@ class TtsService : Service() {
         )
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("EchoNotes")
+            .setContentTitle(getString(R.string.app_display_name))
             .setContentText(content)
             .setSmallIcon(android.R.drawable.ic_btn_speak_now)
             .setContentIntent(pendingIntent)
@@ -155,7 +156,7 @@ class TtsService : Service() {
 
     fun startPlaying(text: String, startParagraphIndex: Int = 0, charOffsetInParagraph: Int = 0) {
         ttsManager.speak(text, startParagraphIndex, charOffsetInParagraph)
-        startForeground(NOTIFICATION_ID, createNotification("正在播放..."))
+        startForeground(NOTIFICATION_ID, createNotification(getString(R.string.notification_playing_short)))
         registerReceiver(noisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
     }
 

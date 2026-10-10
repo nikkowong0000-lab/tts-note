@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">TTS Note</string>
+    <string name="app_display_name">EchoNotes</string>
+
+    <!-- Common -->
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="done">Done</string>
+    <string name="create">Create</string>
+    <string name="delete">Delete</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+    <string name="back">Back</string>
+    <string name="language">Language</string>
+    <string name="language_english">English</string>
+    <string name="language_chinese">中文</string>
+
+    <!-- Note list -->
+    <string name="search_ellipsis">Search…</string>
+    <string name="close_search">Close search</string>
+    <string name="import_text_file">Import text file</string>
+    <string name="imported_note">Imported note</string>
+    <string name="add_section">Add section</string>
+    <string name="section_name">Section name</string>
+    <string name="all_sections">All</string>
+    <string name="add_note">Add note</string>
+    <string name="untitled_note">Untitled note</string>
+    <string name="pin">Pin</string>
+    <string name="empty_notes_title">No notes yet</string>
+    <string name="empty_notes_subtitle">Tap the button below to start writing</string>
+
+    <!-- Note edit -->
+    <string name="select_hq_voice">Select high-quality voice</string>
+    <string name="high_quality">High quality</string>
+    <string name="requires_network">Requires network</string>
+    <string name="offline_available">Offline available</string>
+    <string name="smart_toc">Smart contents</string>
+    <string name="search_content">Search content…</string>
+    <string name="title_hint">Title</string>
+    <string name="toc">Contents</string>
+    <string name="toggle_preview">Toggle preview</string>
+    <string name="start_typing">Start typing…</string>
+    <string name="playback_visual_settings">Playback &amp; visual settings</string>
+    <string name="theme_mode">Theme mode</string>
+    <string name="theme_auto">Auto</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="font_size">Font size (%1$dsp)</string>
+    <string name="section_belonging">Section</string>
+    <string name="uncategorized">Uncategorized</string>
+    <string name="select_section">Select section</string>
+    <string name="switch_hq_voice">Switch high-quality voice</string>
+    <string name="switch_hq_voice_desc">Choose a more natural reading voice</string>
+    <string name="sleep_timer">Sleep timer</string>
+    <string name="minutes_short">min</string>
+    <string name="pitch_adjust">Pitch</string>
+    <string name="hq_voice_settings">High-quality voice settings</string>
+    <string name="hq_voice_settings_desc">Open system settings to download better voice packs</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_tts">TTS Playback</string>
+    <string name="notification_playing">EchoNotes is playing…</string>
+    <string name="notification_playing_short">Playing…</string>
 </resources>

@@ -10,6 +10,7 @@ Built with Kotlin + Jetpack Compose. Notes are stored locally (Room). You can ed
 - Local database (Room)
 - TTS playback service (notification / media session)
 - Light / dark / system theme
+- **Language:** English (default) / 中文 — switch in the note editor settings sheet (tune icon → Language)
 
 ## Open in Android Studio
 

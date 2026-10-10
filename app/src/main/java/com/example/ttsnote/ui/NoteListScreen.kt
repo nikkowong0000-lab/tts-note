@@ -22,11 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ttsnote.R
 import com.example.ttsnote.data.Note
 import com.example.ttsnote.data.Section
 
@@ -53,7 +55,8 @@ fun NoteListScreen(
                 reader.readText()
             }
             if (!content.isNullOrBlank()) {
-                val fileName = it.path?.substringAfterLast("/") ?: "匯入的筆記"
+                val fileName = it.path?.substringAfterLast("/")
+                    ?: context.getString(R.string.imported_note)
                 viewModel.insertNote(Note(title = fileName, content = content, sectionId = selectedSectionId ?: 0))
             }
         }
@@ -63,12 +66,12 @@ fun NoteListScreen(
         var sectionName by remember { mutableStateOf("") }
         AlertDialog(
             onDismissRequest = { showAddSectionDialog = false },
-            title = { Text("新增分區") },
+            title = { Text(stringResource(R.string.add_section)) },
             text = {
                 OutlinedTextField(
                     value = sectionName,
                     onValueChange = { sectionName = it },
-                    label = { Text("分區名稱") },
+                    label = { Text(stringResource(R.string.section_name)) },
                     singleLine = true
                 )
             },
@@ -78,10 +81,12 @@ fun NoteListScreen(
                         viewModel.insertSection(sectionName)
                         showAddSectionDialog = false
                     }
-                }) { Text("建立") }
+                }) { Text(stringResource(R.string.create)) }
             },
             dismissButton = {
-                TextButton(onClick = { showAddSectionDialog = false }) { Text("取消") }
+                TextButton(onClick = { showAddSectionDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
             }
         )
     }
@@ -95,7 +100,7 @@ fun NoteListScreen(
                             TextField(
                                 value = searchQuery,
                                 onValueChange = { viewModel.updateSearchQuery(it) },
-                                placeholder = { Text("搜尋...") },
+                                placeholder = { Text(stringResource(R.string.search_ellipsis)) },
                                 modifier = Modifier.fillMaxWidth(),
                                 singleLine = true,
                                 colors = TextFieldDefaults.colors(
@@ -106,7 +111,7 @@ fun NoteListScreen(
                                 )
                             )
                         } else {
-                            Text("EchoNotes", fontWeight = FontWeight.Bold)
+                            Text(stringResource(R.string.app_display_name), fontWeight = FontWeight.Bold)
                         }
                     },
                     navigationIcon = {
@@ -115,17 +120,17 @@ fun NoteListScreen(
                                 isSearching = false
                                 viewModel.updateSearchQuery("")
                             }) {
-                                Icon(Icons.Default.Close, contentDescription = "關閉搜尋")
+                                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close_search))
                             }
                         }
                     },
                     actions = {
                         if (!isSearching) {
                             IconButton(onClick = { isSearching = true }) {
-                                Icon(Icons.Default.Search, contentDescription = "搜尋")
+                                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.search))
                             }
                             IconButton(onClick = { filePickerLauncher.launch("text/plain") }) {
-                                Icon(Icons.Default.FileUpload, contentDescription = "匯入文字檔")
+                                Icon(Icons.Default.FileUpload, contentDescription = stringResource(R.string.import_text_file))
                             }
                         }
                     },
@@ -150,7 +155,7 @@ fun NoteListScreen(
                         Tab(
                             selected = selectedSectionId == null,
                             onClick = { viewModel.selectSection(null) },
-                            text = { Text("全部") }
+                            text = { Text(stringResource(R.string.all_sections)) }
                         )
                         sections.forEach { section ->
                             Tab(
@@ -160,7 +165,7 @@ fun NoteListScreen(
                             )
                         }
                         IconButton(onClick = { showAddSectionDialog = true }) {
-                            Icon(Icons.Default.Add, contentDescription = "新增分區")
+                            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_section))
                         }
                     }
                 }
@@ -173,7 +178,7 @@ fun NoteListScreen(
                 contentColor = Color.White,
                 shape = RoundedCornerShape(24.dp)
             ) {
-                Icon(Icons.Default.Add, contentDescription = "新增筆記", modifier = Modifier.size(36.dp))
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_note), modifier = Modifier.size(36.dp))
             }
         }
     ) { padding ->
@@ -221,7 +226,7 @@ fun NoteListScreen(
                                             .padding(horizontal = 20.dp),
                                         contentAlignment = Alignment.CenterEnd
                                     ) {
-                                        Icon(Icons.Default.Delete, contentDescription = "刪除", tint = MaterialTheme.colorScheme.error)
+                                        Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete), tint = MaterialTheme.colorScheme.error)
                                     }
                                 },
                                 enableDismissFromStartToEnd = false
@@ -253,7 +258,7 @@ fun NoteItem(note: Note, onClick: () -> Unit) {
         Column(modifier = Modifier.padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = if (note.title.isBlank()) "無標題筆記" else note.title,
+                    text = if (note.title.isBlank()) stringResource(R.string.untitled_note) else note.title,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.ExtraBold,
                     modifier = Modifier.weight(1f),
@@ -263,7 +268,7 @@ fun NoteItem(note: Note, onClick: () -> Unit) {
                 if (note.isPinned) {
                     Icon(
                         Icons.Default.PushPin,
-                        contentDescription = "釘選",
+                        contentDescription = stringResource(R.string.pin),
                         modifier = Modifier.size(18.dp),
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -312,12 +317,12 @@ fun EmptyState(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            "還沒有任何筆記",
+            stringResource(R.string.empty_notes_title),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.outline
         )
         Text(
-            "點擊右下角按鈕開始記錄吧！",
+            stringResource(R.string.empty_notes_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
             textAlign = TextAlign.Center

@@ -1,5 +1,6 @@
 package com.example.ttsnote
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,6 +30,10 @@ class MainActivity : ComponentActivity() {
     private val viewModel: NoteViewModel by viewModels {
         val app = application as TTSNoteApplication
         NoteViewModelFactory(app.repository, app.preferenceManager)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleHelper.wrap(newBase))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

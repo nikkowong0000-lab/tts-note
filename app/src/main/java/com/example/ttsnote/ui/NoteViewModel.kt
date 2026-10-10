@@ -29,6 +29,9 @@ class NoteViewModel(
     val themeMode: StateFlow<ThemeMode> = preferenceManager.themeMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ThemeMode.Auto)
 
+    val language: StateFlow<String> = preferenceManager.language
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), com.example.ttsnote.LocaleHelper.LANG_EN)
+
     val allSections: StateFlow<List<Section>> = repository.allSections
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -56,8 +59,14 @@ class NoteViewModel(
         preferenceManager.updateThemeMode(mode)
     }
 
+    fun updateLanguage(language: String) = viewModelScope.launch {
+        preferenceManager.updateLanguage(language)
+    }
+
     fun handleAutoTitle(note: Note, content: String) {
-        if (note.title.startsWith("無標題筆記") || note.title.isEmpty()) {
+        val untitledEn = "Untitled note"
+        val untitledZh = "無標題筆記"
+        if (note.title.startsWith(untitledEn) || note.title.startsWith(untitledZh) || note.title.isEmpty()) {
             val detectedTitle = com.example.ttsnote.tts.SemanticParser.findTitle(content)
             if (detectedTitle != null && detectedTitle != note.title) {
                 updateNote(note.copy(title = detectedTitle))
